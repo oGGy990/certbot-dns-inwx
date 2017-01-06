@@ -8,6 +8,10 @@ install_requires = [
     'zope.interface',
 ]
 
+data_files = [
+	('/etc/letsencrypt', 'inwx.cfg')
+]
+
 #if sys.version_info.major == 3:
 #    install_requires.extend([
 #        'xmlrpc',
@@ -26,6 +30,7 @@ setup(
     license='Apache License 2.0',
     install_requires=install_requires,
     packages=find_packages(),
+    data_files=data_files,
     entry_points={
         'certbot.plugins': [
             'dnsinwx = certbot_inwx.inwxauth:InwxDnsAuth',
