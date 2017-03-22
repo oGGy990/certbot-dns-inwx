@@ -4,6 +4,7 @@ import logging
 import zope.interface
 
 import sys
+import time
 
 if sys.version_info.major == 3:
     import configparser
@@ -151,6 +152,7 @@ class InwxDnsAuth(common.Plugin):
         
         """
         results = []
+        success = False
         for achall in achalls:
             response, validation = achall.response_and_validation()
             parent = self.get_inwx_domain(achall.domain)
@@ -162,7 +164,12 @@ class InwxDnsAuth(common.Plugin):
                 results.append(None)
                 continue
             results.append(response)
-        print(results)
+            success = True
+        
+        #print(results)
+        if success == True:
+        	logging.info("Waiting 60s for DNS changes to propagate...")
+        	time.sleep(60)
         return results
 
     def cleanup(self, achalls):

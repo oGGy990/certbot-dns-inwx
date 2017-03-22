@@ -11,7 +11,7 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
 ## Installation
 First install the plugin:
 
-    python setup.py
+    python setup.py install
 
 Configure it with your INWX API Login Details:
 

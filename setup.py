@@ -9,7 +9,7 @@ install_requires = [
 ]
 
 data_files = [
-	('/etc/letsencrypt', 'inwx.cfg')
+	('/etc/letsencrypt', ['inwx.cfg'])
 ]
 
 #if sys.version_info.major == 3:
