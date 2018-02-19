@@ -1,10 +1,12 @@
+import sys
+
 from setuptools import setup
 from setuptools import find_packages
-import sys
 
 install_requires = [
     'acme',
-    'certbot',
+    'certbot>=0.15',
+    'setuptools>=1.0',
     'zope.interface',
 ]
 
@@ -12,19 +14,11 @@ data_files = [
 	('/etc/letsencrypt', ['inwx.cfg'])
 ]
 
-#if sys.version_info.major == 3:
-#    install_requires.extend([
-#        'xmlrpc',
-#    ])
-#else:
-#    install_requires.extend([
-#        'xmlrpclib',
-#    ])
-
 setup(
     name='certbot-dns-inwx',
-    description="INWX DNS authenticator plugin for certbot",
-    url='http://www.dryder.de',
+    version='2.0.0',
+    description="INWX DNS Authenticator plugin for Certbot",
+    url='https://github.com/oGGy990/certbot-dns-inwx',
     author="Oliver Ney",
     author_email='oliver@dryder.de',
     license='Apache License 2.0',
@@ -33,7 +27,7 @@ setup(
     data_files=data_files,
     entry_points={
         'certbot.plugins': [
-            'dnsinwx = certbot_inwx.inwxauth:InwxDnsAuth',
+            'dns-inwx = certbot_dns_inwx.dns_inwx:Authenticator',
         ],
     },
 )
