@@ -22,6 +22,8 @@ class Authenticator(dns_common.DNSAuthenticator):
     description = ('Obtain certificates using a DNS TXT record (if you are '
                    'using INWX for your domains).')
     ttl = 300
+    
+    clientCache = {}
 
     def __init__(self, *args, **kwargs):
         """Initialize an INWX Authenticator"""
@@ -58,10 +60,17 @@ class Authenticator(dns_common.DNSAuthenticator):
         self._get_inwx_client().del_txt_record(domain, validation_name, validation)
 
     def _get_inwx_client(self):
-        return _INWXClient(self.credentials.conf('url'),
-                           self.credentials.conf('username'),
-                           self.credentials.conf('password'),
-                           self.credentials.conf('shared_secret'))
+        key = self.conf('credentials')
+        if key in Authenticator.clientCache:
+            return Authenticator.clientCache[key]
+        else:
+            client = _INWXClient(self.credentials.conf('url'),
+                                 self.credentials.conf('username'),
+                                 self.credentials.conf('password'),
+                                 self.credentials.conf('shared_secret'))
+            # Login was successful if this point is reached
+            Authenticator.clientCache[key] = client
+            return client
 
 class _INWXClient(object):
     """

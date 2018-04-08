@@ -16,7 +16,7 @@ data_files = [
 
 setup(
     name='certbot-dns-inwx',
-    version='2.0.0',
+    version='2.0.1',
     description="INWX DNS Authenticator plugin for Certbot",
     url='https://github.com/oGGy990/certbot-dns-inwx',
     author="Oliver Ney",
