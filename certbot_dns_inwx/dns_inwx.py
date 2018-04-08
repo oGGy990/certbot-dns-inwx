@@ -104,20 +104,9 @@ class _INWXClient(object):
         domain = self._find_domain(domain_name)
         
         try:
-            info = self.inwx.nameserver.info({'domain': domain, 'name': record_name})['resData']
-            if (not 'record' in info) or 0 == info['count']: raise NameError('Unknown record')
-        except NameError as err:
-            logging.debug("No record {0} existing ({1})".format(record_name, err))
-            try:
-                res = self.inwx.nameserver.createRecord({'domain': domain, 'name': record_name, 'type': 'TXT', 'content': record_content, 'ttl': record_ttl})['resData']
-            except:
-                raise errors.PluginError('Failed to add TXT DNS record {0} to {1}'.format(record_name, domain))
-        else:
-            try:
-                logging.debug('Updating record {0} of {1}...'.format(record_name, domain))
-                self.inwx.nameserver.updateRecord({'id': info['record'][0]['id'], 'type': 'TXT', 'content': record_content, 'ttl': record_ttl})
-            except:
-                raise errors.PluginError('Failed to update TXT DNS record {0} of {1}'.format(record_name, domain))
+            res = self.inwx.nameserver.createRecord({'domain': domain, 'name': record_name, 'type': 'TXT', 'content': record_content, 'ttl': record_ttl})['resData']
+        except:
+            raise errors.PluginError('Failed to add TXT DNS record {0} to {1}'.format(record_name, domain))
         
     def del_txt_record(self, domain_name, record_name, record_content):
         """
@@ -132,7 +121,7 @@ class _INWXClient(object):
         domain = self._find_domain(domain_name)
         
         try:
-            info = self.inwx.nameserver.info({'domain': domain, 'name': record_name})['resData']
+            info = self.inwx.nameserver.info({'domain': domain, 'name': record_name, 'content': record_content})['resData']
             if (not 'record' in info) or 0 == info['count']: raise NameError('Unknown record')
         except NameError as err:
             raise errors.PluginError('No record {0} existing ({1})'.format(record_name, err))
