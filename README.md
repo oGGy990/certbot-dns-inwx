@@ -9,15 +9,25 @@ An authenticator plugin for [certbot](https://certbot.eff.org/) to support [Let'
 For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https://launchpad.net/~certbot/+archive/ubuntu/certbot)
 
 ## Installation
-First install the plugin:
+1. First install the plugin:
+ * With dependencies (not recommended if using certbot from your distribution repositories):
+   ```
+   python setup.py install
+   ```
+ * Without dependencies (if using certbot from your distribution repository):
+   ```
+   python setup.py develop --no-deps
+   ```
+ * With certbot-auto (needs to be reinstalled after every certbot-auto update):
+   ```
+   /root/.local/share/letsencrypt/bin/pip install .
+   ```
 
-    python setup.py install
-
-Configure it with your INWX API Login Details:
+2. Configure it with your INWX API Login Details:
 
     vim /etc/letsencrypt/inwx.cfg
 
-Make sure the file is only readable by root! Otherwise all your domains might be in danger.
+3. Make sure the file is only readable by root! Otherwise all your domains might be in danger.
 
 ## Usage
 Request new certificates via a certbot invocation like this:
