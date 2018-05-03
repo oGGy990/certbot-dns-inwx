@@ -10,13 +10,13 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
 
 ## Installation
 1. First install the plugin:
- * With dependencies (not recommended if using certbot from your distribution repositories):
-   ```
-   python setup.py install
-   ```
  * Without dependencies (if using certbot from your distribution repository):
    ```
-   python setup.py develop --no-deps
+   python3 setup.py develop --no-deps
+   ```
+ * With dependencies (not recommended if using certbot from your distribution repositories):
+   ```
+   python3 setup.py install
    ```
  * With certbot-auto (needs to be reinstalled after every certbot-auto update):
    ```
