@@ -25,7 +25,11 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
 
 2. Configure it with your INWX API Login Details:
 
+   ```
     vim /etc/letsencrypt/inwx.cfg
+   ```
+    
+    Add quotes to your password if it contains characters like '#'.
 
 3. Make sure the file is only readable by root! Otherwise all your domains might be in danger.
 

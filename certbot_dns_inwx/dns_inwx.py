@@ -48,8 +48,6 @@ class Authenticator(dns_common.DNSAuthenticator):
                 'url': 'URL of the INWX XML-RPC API to use.',
                 'username': 'Username of the INWX API account.',
                 'password': 'Password of the INWX API account.',
-                'shared_secret': 'Optional shared secret code for the two-factor ' + \
-                                 'authentication assigned to the INWX API account.'
             }
         )
     
