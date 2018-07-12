@@ -1,4 +1,4 @@
--# certbot-dns-inwx
+# certbot-dns-inwx
 INWX DNS authenticator plugin for certbot
 
 An authenticator plugin for [certbot](https://certbot.eff.org/) to support [Let's Encrypt](https://letsencrypt.org/) DNS challenges (dns-01) for domains managed by the nameservers of InterNetworX ([INWX](https://www.inwx.com)).
