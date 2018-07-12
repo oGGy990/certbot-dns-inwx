@@ -24,6 +24,7 @@ class Authenticator(dns_common.DNSAuthenticator):
     ttl = 300
     
     clientCache = {}
+    nameCache = {}
 
     def __init__(self, *args, **kwargs):
         """Initialize an INWX Authenticator"""
@@ -52,12 +53,50 @@ class Authenticator(dns_common.DNSAuthenticator):
                                  'authentication assigned to the INWX API account.'
             }
         )
+        
+    def _follow_cnames(self, domain, validation_name):
+        """
+        Performs recursive CNAME lookups in case there exists a CNAME for the given
+        validation name.
+        If the optional dependency dnspython is not installed, the given name is
+        simply returned.
+        """
+        try:
+            import dns.exception
+            import dns.resolver
+            import dns.name
+        except ImportError:
+            return validation_name
+            
+        resolver = dns.resolver.Resolver()
+        name = dns.name.from_text(validation_name)
+        while 1:
+            try:
+                answer = resolver.query(name, 'CNAME')
+                if 1 <= len(answer):
+                    name = answer[0].target
+                else:
+                    break
+            except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
+                break
+            except (dns.exception.Timeout, dns.resolver.YXDOMAIN, dns.resolver.NoNameservers):
+                raise errors.PluginError('Failed to lookup CNAMEs on your requested domain {0}'.format(domain))
+        return name.to_text(True)
     
     def _perform(self, domain, validation_name, validation):
-        self._get_inwx_client().add_txt_record(domain, validation_name, validation, self.ttl)
+        if validation_name in Authenticator.nameCache:
+            resolved = Authenticator.nameCache[validation_name]
+        else:
+            resolved = self._follow_cnames(domain, validation_name)
+            Authenticator.nameCache[validation_name] = resolved
+        
+        if resolved != validation_name:
+            logger.info('Validation record for %s redirected by CNAME(s) to %s', domain, resolved)
+        self._get_inwx_client().add_txt_record(domain, resolved, validation, self.ttl)
         
     def _cleanup(self, domain, validation_name, validation):
-        self._get_inwx_client().del_txt_record(domain, validation_name, validation)
+        resolved = Authenticator.nameCache[validation_name]
+        self._get_inwx_client().del_txt_record(domain, resolved, validation)
 
     def _get_inwx_client(self):
         key = self.conf('credentials')
@@ -90,7 +129,7 @@ class _INWXClient(object):
         except NameError as err:
             raise errors.PluginError("INWX login failed: {0}".format(err))
     
-    def add_txt_record(self, domain_name, record_name, record_content, record_ttl):
+    def add_txt_record(self, source, record_name, record_content, record_ttl):
         """
         Add a TXT record using the supplied information.
         
@@ -101,14 +140,14 @@ class _INWXClient(object):
         :raises certbot.errors.PluginError: if an error occurs communicating with the DNS server
         """
         
-        domain = self._find_domain(domain_name)
+        domain = self._find_domain(record_name)
         
         try:
             res = self.inwx.nameserver.createRecord({'domain': domain, 'name': record_name, 'type': 'TXT', 'content': record_content, 'ttl': record_ttl})['resData']
         except:
-            raise errors.PluginError('Failed to add TXT DNS record {0} to {1}'.format(record_name, domain))
+            raise errors.PluginError('Failed to add TXT DNS record {0} to {1} for {2}'.format(record_name, domain, source))
         
-    def del_txt_record(self, domain_name, record_name, record_content):
+    def del_txt_record(self, source, record_name, record_content):
         """
         Delete a TXT record using the supplied information.
         
@@ -118,7 +157,7 @@ class _INWXClient(object):
         :raises certbot.errors.PluginError: if an error occurs communicating with the DNS server
         """
         
-        domain = self._find_domain(domain_name)
+        domain = self._find_domain(record_name)
         
         try:
             info = self.inwx.nameserver.info({'domain': domain, 'name': record_name, 'content': record_content})['resData']
@@ -129,7 +168,7 @@ class _INWXClient(object):
         try:
             self.inwx.nameserver.deleteRecord({'id': info['record'][0]['id']})
         except:
-            raise errors.PluginError('Failed to delete TXT DNS record {0} of {1}'.format(record_name, domain))
+            raise errors.PluginError('Failed to delete TXT DNS record {0} of {1} for {2}'.format(record_name, domain, source))
     
     def _find_domain(self, domain_name):
         """

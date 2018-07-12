@@ -1,4 +1,4 @@
-# certbot-dns-inwx
+-# certbot-dns-inwx
 INWX DNS authenticator plugin for certbot
 
 An authenticator plugin for [certbot](https://certbot.eff.org/) to support [Let's Encrypt](https://letsencrypt.org/) DNS challenges (dns-01) for domains managed by the nameservers of InterNetworX ([INWX](https://www.inwx.com)).
@@ -53,3 +53,14 @@ Renewals will automatically be performed using the same authenticator and creden
 ```
 
 See also `certbot --help certbot-dns-inwx:dns-inwx` for further information.
+
+## CNAME Redirects
+This plugin supports redirections on the DNS-01 validation records using CNAME records.
+
+For example, you can have a domain `a.tld` which is not necessarily managed by INWX and possibly may not be automated via certbot. Additionally, you have a domain `b.tld` which is managed by INWX.
+
+An easy solution to automate certificate retrieval for `a.tld` is to add a CNAME record for the name `_acme_challenge.a.tld` to `a.tld` which is pointing to i.e. `_a_validation.b.tld` in your providers web interface.
+
+A command like `certbot -a certbot-dns-inwx:dns-inwx -d a.tld` will then make certbot place its validation token at `_a_validation.b.tld` via INWX and your validation for `a.tld` succeeds.
+
+**NOTE:** This is an optional feature and requires dnspython to be installed. To install it use your distribution repository or i.e. `pip install dnspython`.
