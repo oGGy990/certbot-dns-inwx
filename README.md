@@ -20,7 +20,7 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
    ```
  * With certbot-auto (needs to be reinstalled after every certbot-auto update):
    ```
-   /root/.local/share/letsencrypt/bin/pip install .
+   /opt/eff.org/certbot/venv/bin/pip install .
    ```
 
 2. Configure it with your INWX API Login Details:
