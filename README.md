@@ -18,6 +18,10 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
    ```
    python3 setup.py install
    ```
+ * Via PIP:
+   ```
+   pip install certbot-dns-inwx
+   ```
  * With certbot-auto (needs to be reinstalled after every certbot-auto update):
    ```
    /opt/eff.org/certbot/venv/bin/pip install .
@@ -27,7 +31,14 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
    ```
    vim /etc/letsencrypt/inwx.cfg
    ```
-
+   with the following content (also see *inwx.cfg* of the repository):
+   ```
+   certbot_dns_inwx:dns_inwx_url           = https://api.domrobot.com/xmlrpc/
+   certbot_dns_inwx:dns_inwx_username      = your_username
+   certbot_dns_inwx:dns_inwx_password      = your_password
+   certbot_dns_inwx:dns_inwx_shared_secret = your_shared_secret optional
+   ```
+   The shared secret is your INWX 2FA OTP code. It is shown to you when setting up the 2FA. It is **not** the 6 digit code you need to enter when siging in. If you are not using 2FA, simply keep the value the way it is.
 3. Make sure the file is only readable by root! Otherwise all your domains might be in danger:
    ```
    chmod 0600 /etc/letsencrypt/inwx.cfg
@@ -64,3 +75,6 @@ An easy solution to automate certificate retrieval for `a.tld` is to add a CNAME
 A command like `certbot -a certbot-dns-inwx:dns-inwx -d a.tld` will then make certbot place its validation token at `_a_validation.b.tld` via INWX and your validation for `a.tld` succeeds.
 
 **NOTE:** This is an optional feature and requires dnspython to be installed. To install it use your distribution repository or i.e. `pip install dnspython`.
+
+## Note
+While the plugin itself is licensed according to the Apache License v2.0 the contained INWX DomRobot Client by INWX is licensed according to the MIT License.
