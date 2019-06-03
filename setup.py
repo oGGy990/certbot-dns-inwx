@@ -23,7 +23,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='certbot-dns-inwx',
-    version='2.1.1',
+    version='2.1.2',
     description="INWX DNS Authenticator plugin for Certbot",
     long_description=long_description,
     long_description_content_type="text/markdown",

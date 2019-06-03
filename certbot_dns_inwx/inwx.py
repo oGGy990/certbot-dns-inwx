@@ -44,15 +44,16 @@ class domrobot ():
             requestContent = xmlrpclib.dumps(tuple_params, methodname)
         if(self.debug == True):
             print(("Anfrage: "+str(requestContent).replace("\n", "")))
+        requestContent = bytearray(requestContent, 'utf-8')
         headers = { 'User-Agent' : 'DomRobot/'+self.version+' Python-v2.7', 'Content-Type': 'text/xml','content-length': str(len(requestContent))}
         if(self.cookie!=None):
             headers['Cookie'] = self.cookie
 
         if sys.version_info.major == 3:
-            req = urllib.request.Request(self.url, bytearray(requestContent, 'ascii'), headers)
+            req = urllib.request.Request(self.url, requestContent, headers)
             response = urllib.request.urlopen(req)
         else:
-            req = urllib2.Request(self.url, bytearray(requestContent, 'ascii'), headers)
+            req = urllib2.Request(self.url, requestContent, headers)
             response = urllib2.urlopen(req)
 
         responseContent = response.read()
