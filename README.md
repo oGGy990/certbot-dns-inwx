@@ -71,7 +71,7 @@ This plugin supports redirections on the DNS-01 validation records using CNAME r
 
 For example, you can have a domain `a.tld` which is not necessarily managed by INWX and possibly may not be automated via certbot. Additionally, you have a domain `b.tld` which is managed by INWX.
 
-An easy solution to automate certificate retrieval for `a.tld` is to add a CNAME record for the name `_acme_challenge.a.tld` to `a.tld` which is pointing to i.e. `_a_validation.b.tld` in your providers web interface.
+An easy solution to automate certificate retrieval for `a.tld` is to add a CNAME record for the name `_acme-challenge.a.tld` to `a.tld` which is pointing to i.e. `_a_validation.b.tld` in your providers web interface.
 
 A command like `certbot -a certbot-dns-inwx:dns-inwx -d a.tld` will then make certbot place its validation token at `_a_validation.b.tld` via INWX and your validation for `a.tld` succeeds.
 
