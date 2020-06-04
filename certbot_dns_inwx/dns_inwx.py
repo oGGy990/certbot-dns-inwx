@@ -1,5 +1,6 @@
 """DNS Authenticator using INWX XML-RPC DNS API."""
 import logging
+import sys
 
 import zope.interface
 
@@ -33,9 +34,13 @@ class Authenticator(dns_common.DNSAuthenticator):
         
     @classmethod
     def add_parser_arguments(cls, add):
+        if sys.platform.startswith('freebsd'):
+            cfg_default = '/usr/local/etc/letsencrypt/inwx.cfg'
+        else:
+            cfg_default = '/etc/letsencrypt/inwx.cfg'
         super(Authenticator, cls).add_parser_arguments(add, default_propagation_seconds=60)
         add('credentials', help=('Path to INWX account credentials INI file'),
-            default='/etc/letsencrypt/inwx.cfg')
+            default=cfg_default)
     
     def more_info(self):
         return 'This plugin configures a DNS TXT record to respond to a dns-01 challenge using ' + \
