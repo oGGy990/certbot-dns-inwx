@@ -14,9 +14,15 @@ extras_require = {
     'CNAME': ['dnspython'],
 }
 
-data_files = [
-	('/etc/letsencrypt', ['inwx.cfg'])
-]
+if sys.platform.startswith('freebsd'):
+    data_files = [
+    	('/usr/local/etc/letsencrypt', ['inwx.cfg'])
+    ]
+else:
+    data_files = [
+    	('/etc/letsencrypt', ['inwx.cfg'])
+    ]
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
