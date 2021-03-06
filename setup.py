@@ -1,18 +1,31 @@
+import os
 import sys
 
 from setuptools import setup
 from setuptools import find_packages
 
+version = '2.1.3'
+cb_required = '0.15'
+
 install_requires = [
-    'acme',
-    'certbot>=0.15',
-    'setuptools>=1.0',
+    'setuptools>=39.0.1',
     'zope.interface',
 ]
 
 extras_require = {
     'CNAME': ['dnspython'],
 }
+
+if not os.environ.get('SNAP_BUILD'):
+    install_requires.extend([
+        'acme>=0.31.0',
+        f'certbot>={cb_required}',
+    ])
+elif 'bdist_wheel' in sys.argv[1:]:
+    raise RuntimeError('Unset SNAP_BUILD when building wheels '
+                       'to include certbot dependencies.')
+if os.environ.get('SNAP_BUILD'):
+    install_requires.append('packaging')
 
 if sys.platform.startswith('freebsd'):
     data_files = [
@@ -29,7 +42,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='certbot-dns-inwx',
-    version='2.1.2',
+    version=version,
     description="INWX DNS Authenticator plugin for Certbot",
     long_description=long_description,
     long_description_content_type="text/markdown",

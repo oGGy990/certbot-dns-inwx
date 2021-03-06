@@ -11,6 +11,17 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
 
 ## Installation
 1. First install the plugin:
+ * Via Snap (requires certbot to be installed via snap):
+   ```
+   snap install certbot-dns-inwx
+   snap set certbot trust-plugin-with-root=ok
+   snap connect certbot:plugin certbot-dns-inwx
+   snap connect certbot-dns-inwx:certbot-metadata certbot:certbot-metadata
+   ```
+ * Via PIP:
+   ```
+   pip install certbot-dns-inwx
+   ```
  * Without dependencies (if using certbot from your distribution repository):
    ```
    python3 setup.py develop --no-deps
@@ -19,11 +30,7 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
    ```
    python3 setup.py install
    ```
- * Via PIP:
-   ```
-   pip install certbot-dns-inwx
-   ```
- * With certbot-auto (needs to be reinstalled after every certbot-auto update):
+ * With certbot-auto (deprecated for most platforms, needs to be reinstalled after every certbot-auto update):
    ```
    /opt/eff.org/certbot/venv/bin/pip install .
    ```
@@ -50,7 +57,7 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
 ## Usage
 Request new certificates via a certbot invocation like this:
 
-    certbot certonly -a certbot-dns-inwx:dns-inwx -d sub.domain.tld -d *.wildcard.tld
+    certbot certonly -a dns-inwx -d sub.domain.tld -d *.wildcard.tld
 
 Renewals will automatically be performed using the same authenticator and credentials by certbot.
 
