@@ -43,10 +43,11 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
    ```
    dns_inwx_url           = https://api.domrobot.com/xmlrpc/
    dns_inwx_username      = your_username
-   dns_inwx_password      = your_password
+   dns_inwx_password      = """your_password"""
    dns_inwx_shared_secret = your_shared_secret optional
    ```
    The shared secret is your INWX 2FA OTP code. It is shown to you when setting up the 2FA. It is **not** the 6 digit code you need to enter when siging in. If you are not using 2FA, simply keep the value the way it is.
+   For general syntax requirements of this file, see [here](https://configobj.readthedocs.io/en/latest/configobj.html#the-config-file-format).
 
    Also note [these remarks](#usage-on-certbot--v170) if you are using an older version of certbot.
 3. Make sure the file is only readable by root! Otherwise all your domains might be in danger:
