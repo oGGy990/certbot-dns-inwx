@@ -41,6 +41,17 @@ class Authenticator(dns_common.DNSAuthenticator):
         super(Authenticator, cls).add_parser_arguments(add, default_propagation_seconds=60)
         add('credentials', help=('Path to INWX account credentials INI file'),
             default=cfg_default)
+        
+        try:
+            import dns.exception
+            import dns.resolver
+            import dns.name
+            add('follow-cnames', 
+                help=('If \'true\', the plugin will follow CNAME redirects on validation records'),
+                default='true')
+        except ImportError:
+            pass
+
     
     def more_info(self):
         return 'This plugin configures a DNS TXT record to respond to a dns-01 challenge using ' + \
@@ -70,6 +81,9 @@ class Authenticator(dns_common.DNSAuthenticator):
             import dns.exception
             import dns.resolver
             import dns.name
+
+            if self.conf('follow-cnames') != 'true':
+                return validation_name
         except ImportError:
             return validation_name
             

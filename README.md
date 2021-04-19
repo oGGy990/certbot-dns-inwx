@@ -76,6 +76,11 @@ Before certbot v1.7.0, third plugins needed to be accessed using their plugin na
  --dns-inwx-credentials DNS_INWX_CREDENTIALS
                         Path to INWX account credentials INI file (default:
                         /etc/letsencrypt/inwx.cfg)
+ --dns-inwx-follow-cnames DNS_INWX_FOLLOW_CNAMES
+                        If 'true', the plugin will follow CNAME redirects 
+                        on validation records (default: true)
+                        This command line option is only exposed, if 
+                        dnspython is installed.
 
 ```
 
