@@ -5,6 +5,8 @@ description: INWX DNS Authenticator plugin for Certbot
 grade: stable
 confinement: strict
 adopt-info: certbot-dns-inwx
+architectures:
+  - build-on: [amd64, arm64, armhf]
 
 parts:
   certbot-dns-inwx:
