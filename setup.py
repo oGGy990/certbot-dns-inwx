@@ -21,9 +21,18 @@ if not os.environ.get('SNAP_BUILD'):
         'acme>=0.31.0',
         f'certbot>={cb_required}',
     ])
-elif 'bdist_wheel' in sys.argv[1:]:
-    raise RuntimeError('Unset SNAP_BUILD when building wheels '
-                       'to include certbot dependencies.')
+# Snap Core20 Python Plugin is using 'pip install -U .' to build the package.
+# PEP 517 builds do not fall back to 'setup.py install' - which is deprecated -
+# as pip does for non-PEP 517 builds.
+# The following error which was taken from the original certbot dns plugins thus
+# always leads to a failed snap build. It is merely a sanity check to ensure
+# SNAP_BUILD is not set if actually building a Python wheel for e.g. PyPi and
+# not really required. It is kept for completeness and as a reminder to check
+# for what kind of replacement the certbot community comes up with.
+# 
+# elif 'bdist_wheel' in sys.argv[1:]:
+#    raise RuntimeError('Unset SNAP_BUILD when building wheels '
+#                        'to include certbot dependencies.')
 if os.environ.get('SNAP_BUILD'):
     install_requires.append('packaging')
 
