@@ -204,13 +204,10 @@ class _INWXClient(object):
         for guess in domain_name_guesses:
             logging.debug('Testing {0} for domain {1}...'.format(guess, domain_name))
             try:
-                info = self.inwx.domain.info({'domain': guess})['resData']
+                # this raises a NameError when the domain does not exist (or any other problem occurred):
+                self.inwx.nameserver.info({'domain': guess})
             except:
                 continue
-            if not 'status' in info:
-                raise errors.PluginError('No status for INWX domain {0}'.format(guess))
-            if 'OK' != info['status']:
-                raise errors.PluginError('Not OK status for INWX domain {0}'.format(guess))
             return guess
         
         raise errors.PluginError('Unable to determine base domain for {0} using names: {1}.'.format(domain_name, domain_name_guesses))
