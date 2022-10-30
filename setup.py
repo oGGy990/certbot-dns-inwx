@@ -4,7 +4,7 @@ import sys
 from setuptools import setup
 from setuptools import find_packages
 
-version = '2.1.3'
+version = '2.2.0'
 cb_required = '0.15'
 
 install_requires = [
