@@ -9,7 +9,6 @@ cb_required = '0.15'
 
 install_requires = [
     'setuptools>=39.0.1',
-    'zope.interface',
 ]
 
 extras_require = {
