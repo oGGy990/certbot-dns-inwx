@@ -1,22 +1,23 @@
 name: certbot-dns-inwx
-base: core20
+base: core24
 summary: INWX DNS Authenticator plugin for Certbot
 description: INWX DNS Authenticator plugin for Certbot
+license: Apache-2.0
 grade: stable
 confinement: strict
 adopt-info: certbot-dns-inwx
-architectures:
-  - build-on: amd64
-  - build-on: arm64
-  - build-on: armhf
+platforms:
+  amd64:
+  arm64:
+  armhf:
 
 parts:
   certbot-dns-inwx:
     plugin: python
     source: .
     override-pull: |
-        snapcraftctl pull
-        snapcraftctl set-version `grep ^version "${SNAPCRAFT_PART_SRC}/setup.py" | cut -f2 -d= | tr -d "'[:space:]"`
+        craftctl default
+        craftctl set version=$(grep ^version "${CRAFT_PART_SRC}/setup.py" | cut -f2 -d= | tr -d "'[:space:]")
     build-environment:
       - SNAP_BUILD: "True"
   certbot-metadata:
@@ -24,15 +25,15 @@ parts:
     source: .
     stage: [setup.py, certbot-shared]
     override-pull: |
-        snapcraftctl pull
-        mkdir -p $SNAPCRAFT_PART_SRC/certbot-shared
+        craftctl default
+        mkdir -p $CRAFT_PART_SRC/certbot-shared
 
 slots:
   certbot:
     interface: content
     content: certbot-1
     read:
-      - $SNAP/lib/python3.8/site-packages
+      - $SNAP/lib/python3.12/site-packages
 
 plugs:
   certbot-metadata:
