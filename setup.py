@@ -5,7 +5,7 @@ from setuptools import setup
 from setuptools import find_packages
 
 version = '2.2.0'
-cb_required = '0.15'
+cb_required = '3.0.0'
 
 install_requires = [
     'setuptools>=39.0.1',

@@ -4,7 +4,7 @@ INWX DNS authenticator plugin for certbot
 An authenticator plugin for [certbot](https://certbot.eff.org/) to support [Let's Encrypt](https://letsencrypt.org/) DNS challenges (dns-01) for domains managed by the nameservers of InterNetworX ([INWX](https://www.inwx.com)).
 
 ## Requirements
-* certbot (>=0.15)
+* certbot (>=3.0.0)
 * setuptools (for manual installation; e.g. `python3-setuptools`)
 
 For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https://launchpad.net/~certbot/+archive/ubuntu/certbot)
