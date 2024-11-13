@@ -1,7 +1,7 @@
 import os
 
-from setuptools import setup
 from setuptools import find_packages
+from setuptools import setup
 
 version = '2.2.1'
 cb_required = '3.0.0'
@@ -10,30 +10,19 @@ install_requires = [
     'setuptools>=39.0.1',
 ]
 
+if os.environ.get('SNAP_BUILD'):
+    install_requires.extend([
+        'packaging',
+    ])
+else:
+    install_requires.extend([
+        f'acme>={cb_required}',
+        f'certbot>={cb_required}',
+    ])
+
 extras_require = {
     'CNAME': ['dnspython'],
 }
-
-if not os.environ.get('SNAP_BUILD'):
-    install_requires.extend([
-        'acme>=0.31.0',
-        f'certbot>={cb_required}',
-    ])
-# Snap Core20 Python Plugin is using 'pip install -U .' to build the package.
-# PEP 517 builds do not fall back to 'setup.py install' - which is deprecated -
-# as pip does for non-PEP 517 builds.
-# The following error which was taken from the original certbot dns plugins thus
-# always leads to a failed snap build. It is merely a sanity check to ensure
-# SNAP_BUILD is not set if actually building a Python wheel for e.g. PyPi and
-# not really required. It is kept for completeness and as a reminder to check
-# for what kind of replacement the certbot community comes up with.
-# 
-# elif 'bdist_wheel' in sys.argv[1:]:
-#    raise RuntimeError('Unset SNAP_BUILD when building wheels '
-#                        'to include certbot dependencies.')
-if os.environ.get('SNAP_BUILD'):
-    install_requires.append('packaging')
-
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -50,6 +39,7 @@ setup(
     license='Apache License 2.0',
     install_requires=install_requires,
     extras_require=extras_require,
+    python_requires='>=3.8',
     packages=find_packages(),
     entry_points={
         'certbot.plugins': [
