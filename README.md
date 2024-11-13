@@ -5,6 +5,7 @@ An authenticator plugin for [certbot](https://certbot.eff.org/) to support [Let'
 
 ## Requirements
 * certbot (>=3.0.0)
+* inwx-domrobot (>=3.2.0)
 * setuptools (for manual installation; e.g. `python3-setuptools`)
 
 For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https://launchpad.net/~certbot/+archive/ubuntu/certbot)
