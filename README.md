@@ -18,21 +18,9 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
    snap connect certbot:plugin certbot-dns-inwx
    snap connect certbot-dns-inwx:certbot-metadata certbot:certbot-metadata
    ```
- * Via PIP:
+ * Via pip:
    ```
    pip install certbot-dns-inwx
-   ```
- * Without dependencies (if using certbot from your distribution repository):
-   ```
-   python3 setup.py develop --no-deps
-   ```
- * With dependencies (not recommended if using certbot from your distribution repositories):
-   ```
-   python3 setup.py install
-   ```
- * With certbot-auto (deprecated for most platforms, needs to be reinstalled after every certbot-auto update):
-   ```
-   /opt/eff.org/certbot/venv/bin/pip install .
    ```
 
 2. Configure it with your INWX API Login Details:
