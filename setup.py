@@ -1,5 +1,4 @@
 import os
-import sys
 
 from setuptools import setup
 from setuptools import find_packages
@@ -35,15 +34,6 @@ if not os.environ.get('SNAP_BUILD'):
 if os.environ.get('SNAP_BUILD'):
     install_requires.append('packaging')
 
-if sys.platform.startswith('freebsd'):
-    data_files = [
-    	('/usr/local/etc/letsencrypt', ['inwx.cfg'])
-    ]
-else:
-    data_files = [
-    	('/etc/letsencrypt', ['inwx.cfg'])
-    ]
-
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -61,7 +51,6 @@ setup(
     install_requires=install_requires,
     extras_require=extras_require,
     packages=find_packages(),
-    data_files=data_files,
     entry_points={
         'certbot.plugins': [
             'dns-inwx = certbot_dns_inwx.dns_inwx:Authenticator',
