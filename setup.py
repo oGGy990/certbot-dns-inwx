@@ -22,8 +22,13 @@ else:
         f'certbot>={cb_required}',
     ])
 
+test_extras = [
+    'pytest',
+]
+
 extras_require = {
     'CNAME': ['dnspython'],
+    'test': test_extras,
 }
 
 with open("README.md", "r") as fh:
