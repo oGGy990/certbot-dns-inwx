@@ -13,6 +13,7 @@ install_requires = [
 if os.environ.get('SNAP_BUILD'):
     install_requires.extend([
         'packaging',
+        'dnspython',
     ])
 else:
     install_requires.extend([

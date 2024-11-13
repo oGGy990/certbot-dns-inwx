@@ -95,7 +95,9 @@ An easy solution to automate certificate retrieval for `a.tld` is to add a CNAME
 
 A command like `certbot -a dns-inwx -d a.tld` will then make certbot place its validation token at `_a_validation.b.tld` via INWX and your validation for `a.tld` succeeds.
 
-**NOTE:** This is an optional feature and requires dnspython to be installed. To install it use your distribution repository or i.e. `pip install dnspython`.
+**NOTE:** This is an optional feature and requires dnspython to be installed.
+To install it use your distribution repository or i.e. `pip install dnspython`.
+The snap package already ships with it.
 
 ## Note
 While the plugin itself is licensed according to the Apache License v2.0 the contained INWX DomRobot Client by INWX is licensed according to the MIT License.
