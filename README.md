@@ -52,8 +52,7 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
    The shared secret is your INWX 2FA OTP key. It is shown to you when setting up the 2FA. It is **not** the 6 digit code you need to enter when siging in. If you are not using 2FA, simply keep the value the way it is.
    For general syntax requirements of this file, see [here](https://configobj.readthedocs.io/en/latest/configobj.html#the-config-file-format).
 
-   Also note [these remarks](#usage-on-certbot--v170) if you are using an older version of certbot.
-3. Make sure the file is only readable by root! Otherwise all your domains might be in danger:
+3. Make sure the file is only readable by root! Otherwise, all your domains might be in danger:
    ```
    chmod 0600 /etc/letsencrypt/inwx.cfg
    ```
@@ -64,11 +63,6 @@ Request new certificates via a certbot invocation like this:
     certbot certonly -a dns-inwx -d sub.domain.tld -d *.wildcard.tld
 
 Renewals will automatically be performed using the same authenticator and credentials by certbot.
-
-## Usage on certbot < v1.7.0
-Before certbot v1.7.0, third plugins needed to be accessed using their plugin name as prefix. If you are still using an older version of certbot, ensure to prefix all options in *inwx.cfg* and on the command-line with `certbot-dns-inwx:`, e.g.:
-
-    certbot certonly -a certbot-dns-inwx:dns-inwx --certbot-dns-inwx:dns-inwx-credentials /root/inwx.cfg -d sub.domain.tld
 
 ## Command Line Options
 ```
