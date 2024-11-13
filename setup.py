@@ -53,9 +53,11 @@ setup(
         "Intended Audience :: System Administrators",
         "Topic :: Internet :: Name Service (DNS)",
         "Topic :: Security :: Cryptography",
+        "Topic :: System :: Installation/Setup",
+        "Topic :: System :: Networking",
+        "Topic :: System :: Systems Administration",
         "Development Status :: 5 - Production/Stable",
         "Environment :: Plugins",
         "Operating System :: OS Independent",
     ]
 )
-
