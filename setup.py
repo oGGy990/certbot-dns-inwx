@@ -7,7 +7,7 @@ version = '2.2.1'
 cb_required = '3.0.0'
 
 install_requires = [
-    'setuptools>=39.0.1',
+    'setuptools>=41.6.0',
 ]
 
 if os.environ.get('SNAP_BUILD'):
