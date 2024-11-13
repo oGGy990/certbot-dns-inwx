@@ -41,11 +41,14 @@ For older Ubuntu distributions check out this PPA: [ppa:certbot/certbot](https:/
    ```
    with the following content (also see *inwx.cfg* of the repository):
    ```
-   dns_inwx_url           = https://api.domrobot.com/xmlrpc/
+   dns_inwx_url           = https://api.domrobot.com
    dns_inwx_username      = your_username
    dns_inwx_password      = """your_password"""
    dns_inwx_shared_secret = your_shared_secret optional
    ```
+   It is recommended to create a subaccount in the INWX interface and restrict this account to the 'DNS management' role.
+   This prevents the possible loss of your domains in case your account credentials are stolen.
+
    The shared secret is your INWX 2FA OTP key. It is shown to you when setting up the 2FA. It is **not** the 6 digit code you need to enter when siging in. If you are not using 2FA, simply keep the value the way it is.
    For general syntax requirements of this file, see [here](https://configobj.readthedocs.io/en/latest/configobj.html#the-config-file-format).
 
@@ -77,9 +80,9 @@ Before certbot v1.7.0, third plugins needed to be accessed using their plugin na
                         Path to INWX account credentials INI file (default:
                         /etc/letsencrypt/inwx.cfg)
  --dns-inwx-follow-cnames DNS_INWX_FOLLOW_CNAMES
-                        If 'true', the plugin will follow CNAME redirects 
-                        on validation records (default: true)
-                        This command line option is only exposed, if 
+                        Shall the plugin follow CNAME redirects on validation
+                        records? (default: True)
+                        This command line option is only exposed if 
                         dnspython is installed.
 
 ```
@@ -98,6 +101,3 @@ A command like `certbot -a dns-inwx -d a.tld` will then make certbot place its v
 **NOTE:** This is an optional feature and requires dnspython to be installed.
 To install it use your distribution repository or i.e. `pip install dnspython`.
 The snap package already ships with it.
-
-## Note
-While the plugin itself is licensed according to the Apache License v2.0 the contained INWX DomRobot Client by INWX is licensed according to the MIT License.

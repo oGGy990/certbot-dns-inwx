@@ -8,6 +8,7 @@ cb_required = '3.0.0'
 
 install_requires = [
     'setuptools>=41.6.0',
+    'inwx-domrobot>=3.2.0',
 ]
 
 if os.environ.get('SNAP_BUILD'):
@@ -44,13 +45,12 @@ setup(
     packages=find_packages(),
     entry_points={
         'certbot.plugins': [
-            'dns-inwx = certbot_dns_inwx.dns_inwx:Authenticator',
+            'dns-inwx = certbot_dns_inwx._internal.dns_inwx:Authenticator',
         ],
     },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
-        "License :: OSI Approved :: MIT License",
         "Intended Audience :: System Administrators",
         "Topic :: Internet :: Name Service (DNS)",
         "Topic :: Security :: Cryptography",
