@@ -9,6 +9,17 @@ from certbot import errors
 from certbot.compat import misc
 from certbot.plugins import dns_common
 
+try:
+    import dns.resolver
+    import dns.name
+except ImportError:
+    dns = None
+
+try:
+    import idna
+except ImportError:
+    idna = None
+
 logger = logging.getLogger(__name__)
 
 
@@ -35,14 +46,11 @@ class Authenticator(dns_common.DNSAuthenticator):
         add('credentials', help='Path to INWX account credentials INI file.',
             default=cfg_default)
 
-        try:
-            import dns.resolver
+        if dns is not None:
             add('follow-cnames',
                 type=bool,
                 help='Shall the plugin follow CNAME redirects on validation records?',
                 default=True)
-        except ImportError:
-            pass
 
     def more_info(self) -> str:
         return 'This plugin configures a DNS TXT record to respond to a dns-01 challenge using ' + \
@@ -68,14 +76,7 @@ class Authenticator(dns_common.DNSAuthenticator):
         If the optional dependency dnspython is not installed, the given name is
         simply returned.
         """
-        try:
-            import dns.exception
-            import dns.resolver
-            import dns.name
-
-            if not self.conf('follow-cnames'):
-                return validation_name
-        except ImportError:
+        if dns is None or not self.conf('follow-cnames'):
             return validation_name
 
         resolver = dns.resolver.Resolver()
@@ -214,8 +215,21 @@ class _INWXClient:
         if record_name in self.recordCache:
             return self.recordCache[record_name]
 
+        # Workaround for Internationalized Domain Names (IDN): transform punycode to Unicode
+        # To be removed once INWX supports punycode on nameserver.list
+        if record_name.find('xn--') != -1:
+            if idna is None:
+                logger.warning(
+                    'Record name appears to contain an IDN. idna is not installed, cannot convert to Unicode. '
+                    'INWX does not properly support punycode IDNs on all API methods currently.')
+                lookup_name = record_name
+            else:
+                lookup_name = idna.decode(record_name)
+        else:
+            lookup_name = record_name
+
         # Get list of domain name candidates (stripping the TLD as those cannot be registered with INWX)
-        domain_name_guesses = dns_common.base_domain_name_guesses(record_name)[:-1]
+        domain_name_guesses = dns_common.base_domain_name_guesses(lookup_name)[:-1]
 
         # Iterate in reverse order so we begin with the most probable match
         for guess in reversed(domain_name_guesses):
@@ -228,8 +242,13 @@ class _INWXClient:
                 for domain in info['domains']:
                     # Only consider an exact match and domains for which the INWX nameservers are the master
                     if domain['domain'] == guess and domain['type'] == 'MASTER':
-                        self.recordCache[record_name] = guess
-                        return guess
+                        # Workaround for Internationalized Domain Names (IDN) part # 2
+                        if idna is None:
+                            self.recordCache[record_name] = guess
+                            return guess
+                        else:
+                            self.recordCache[record_name] = idna.encode(guess).decode('ascii')
+                            return self.recordCache[record_name]
 
         raise errors.PluginError(
             f'Unable to determine base domain for {record_name} using names: {domain_name_guesses}')

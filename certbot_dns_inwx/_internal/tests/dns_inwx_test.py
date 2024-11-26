@@ -204,6 +204,13 @@ class INWXClientTest(unittest.TestCase):
         result = test_client._find_domain('d.c.b.a')
         assert result == 'b.a'
 
+    def test_find_domain_idna(self):
+        test_client = self._setUpClient()
+        test_client.inwx.call_api = mock.MagicMock(
+            return_value={'code': 1000, 'resData': {'count': 1, 'domains': [{'domain': 'ü.a', 'type': 'MASTER'}]}})
+        result = test_client._find_domain('d.c.xn--tda.a')
+        assert result == 'xn--tda.a'
+
     def test_find_domain_failure(self):
         test_client = self._setUpClient()
         test_client.inwx.call_api = mock.MagicMock(return_value={'code': 1000, 'resData': {'count': 0, 'domains': []}})

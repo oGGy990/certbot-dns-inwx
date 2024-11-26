@@ -15,6 +15,7 @@ if os.environ.get('SNAP_BUILD'):
     install_requires.extend([
         'packaging',
         'dnspython',
+        'idna',
     ])
 else:
     install_requires.extend([
@@ -28,6 +29,7 @@ test_extras = [
 
 extras_require = {
     'CNAME': ['dnspython'],
+    'idna': ['idna'],
     'test': test_extras,
 }
 
