@@ -140,7 +140,7 @@ class _INWXClient:
         except Exception as err:
             raise errors.PluginError(f'INWX login failed: {err}')
         if login_result['code'] != 1000:
-            raise errors.PluginError(f'INWX login failed: {login_result['msg']}')
+            raise errors.PluginError(f"INWX login failed: {login_result['msg']}")
 
     def add_txt_record(self, source: str, record_name: str, record_content: str, record_ttl: int):
         """
@@ -193,7 +193,7 @@ class _INWXClient:
                 raise Exception(
                     f'insufficient authorization. Have you added the \'DNS management\' role to your API account?')
             elif result['code'] != 1000:
-                raise Exception(f'{result['msg']} ({result['code']})')
+                raise Exception(f"{result['msg']} ({result['code']})")
             elif 'resData' in result:
                 return result['resData']
             else:
