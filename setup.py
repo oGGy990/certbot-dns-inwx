@@ -3,7 +3,7 @@ import os
 from setuptools import find_packages
 from setuptools import setup
 
-version = '3.0.1'
+version = '3.0.2'
 cb_required = '3.0.0'
 
 install_requires = [
