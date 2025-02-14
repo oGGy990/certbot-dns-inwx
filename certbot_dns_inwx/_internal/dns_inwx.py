@@ -224,7 +224,7 @@ class _INWXClient:
                 info = self._call_api('nameserver.list', {'domain': guess})
             except:
                 continue
-            if info['count'] > 0:
+            if int(info['count']) > 0:
                 for domain in info['domains']:
                     # Only consider an exact match and domains for which the INWX nameservers are the master
                     if domain['domain'] == guess and domain['type'] == 'MASTER':
