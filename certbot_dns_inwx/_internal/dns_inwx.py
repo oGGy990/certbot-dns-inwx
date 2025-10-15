@@ -57,17 +57,34 @@ class Authenticator(dns_common.DNSAuthenticator):
             'the INWX XML-RPC DNS API.'
 
     def _setup_credentials(self) -> None:
-        self.credentials = self._configure_credentials(
-            'credentials',
-            'path to INWX XML-RPC account credentials INI file',
-            {
-                'url': 'URL of the INWX XML-RPC API to use.',
-                'username': 'Username of the INWX API account.',
-                'password': 'Password of the INWX API account.',
-                'shared_secret': 'Optional shared secret code for the two-factor ' + \
-                                 'authentication assigned to the INWX API account.'
-            }
-        )
+        env_username = os.environ.get("INWX_USERNAME")
+        env_password = os.environ.get("INWX_PASSWORD")
+        env_url = os.environ.get("INWX_URL")
+        env_secret = os.environ.get("INWX_SHARED_SECRET")
+
+        if env_username and env_password and env_url:
+            class EnvCredentials:
+                def conf(self, key):
+                   return {
+                    "url": env_url,
+                    "username": env_username,
+                    "password": env_password,
+                    "shared_secret": env_secret or "",
+                   }[key]
+            self.credentials = EnvCredentials()
+        else:
+            self.credentials = self._configure_credentials(
+                "credentials",
+                "path to INWX XML-RPC account credentials INI file",
+                {
+                    "url": "URL of the INWX XML-RPC API to use.",
+                    "username": "Username of the INWX API account.",
+                    "password": "Password of the INWX API account.",
+                    "shared_secret": "Optional shared secret code for the two-factor "
+                    + "authentication assigned to the INWX API account.",
+                },
+            )
+
 
     def _follow_cnames(self, domain: str, validation_name: str) -> str:
         """
